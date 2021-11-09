@@ -1,4 +1,5 @@
 use clap::{App, Arg};
+use std::io::{Write};
 
 fn get_bitvector(hex_string: &str) -> Vec<u32> {
     let mut bits = Vec::<u32>::with_capacity(hex_string.len() * 4);
@@ -12,9 +13,8 @@ fn get_bitvector(hex_string: &str) -> Vec<u32> {
     return bits
 }
 
-// fn print_bits(bits: &Vec<u32>) {
 fn print_bits(hex_string: &str) {
-    let bits = get_bitvector(hex_string);
+   let bits = get_bitvector(hex_string);
    let mut rows = vec!["".to_string(), "".to_string(), "".to_string(), "".to_string(), "".to_string()];
    // let s: String = "".to_string();
    for i in 0..bits.len() {
@@ -33,8 +33,13 @@ fn print_bits(hex_string: &str) {
         rows[2].push_str("");
         rows[3].push_str(&bits[i].to_string());
     }
+
+    let stdout = std::io::stdout();
+    let mut handle = stdout.lock();
+
     for row in rows.iter() {
-        println!("{:?}", row)
+        handle.write_all(format!("{:}\n", row).as_bytes()).unwrap();
+        // println!("{}", row)
     }
 }
 
