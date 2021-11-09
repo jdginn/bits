@@ -3,28 +3,38 @@ use clap::{App, Arg};
 fn get_bitvector(hex_string: &str) -> Vec<u32> {
     let mut bits = Vec::<u32>::with_capacity(hex_string.len() * 4);
     for c in hex_string.chars() {
-        println!("{:?}", c);
         let digit = c.to_digit(16).unwrap();
         bits.push(digit >> 3 & 0b1);
         bits.push(digit >> 2 & 0b1);
         bits.push(digit >> 1 & 0b1);
         bits.push(digit & 0b1);
-    println!("{:?}", bits);
     }
     return bits
 }
 
 // fn print_bits(bits: &Vec<u32>) {
-fn print_bits(bits: &[u32]) {
-   let mut rows = vec!["".to_string(), "".to_string(), "".to_string()];
+fn print_bits(hex_string: &str) {
+    let bits = get_bitvector(hex_string);
+   let mut rows = vec!["".to_string(), "".to_string(), "".to_string(), "".to_string(), "".to_string()];
    // let s: String = "".to_string();
-   for i in 0..bits.len() + 1 {
-        let s = format!("{:0>3}", i.to_string());
-        println!("{:?}", s);
+   for i in 0..bits.len() {
+        if i % 4 == 0 {
+            for j in 0..rows.len() - 1 {
+                rows[j].push_str(" ")
+            }
+            rows[4].push_str("    ");
+            rows[4].push_str(&hex_string[i / 4 .. i / 4 + 1].to_uppercase());
+        }
+
+        let s = format!("{:0>2}", i.to_string());
         for j in 0..s.len() {
-            println!("{:?}", rows[j]);
             rows[j].push_str(&s[j..j+1])
         }
+        rows[2].push_str("");
+        rows[3].push_str(&bits[i].to_string());
+    }
+    for row in rows.iter() {
+        println!("{:?}", row)
     }
 }
 
@@ -41,5 +51,5 @@ fn main() {
         .get_matches();
 
     let hex_string = matches.value_of("hex_string").unwrap();
-    print_bits(&get_bitvector(hex_string));
+    print_bits(hex_string);
 }
