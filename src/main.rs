@@ -10,25 +10,19 @@ fn get_bitvector(hex_string: &str) -> Vec<u32> {
         bits.push(digit >> 1 & 0b1);
         bits.push(digit & 0b1);
     }
-    return bits;
+    bits
 }
 
 fn print_bits(hex_string: &str) {
     let bits = get_bitvector(hex_string);
-    let mut rows = vec![
-        "".to_string(),
-        "".to_string(),
-        "".to_string(),
-        "".to_string(),
-        "".to_string(),
-    ];
+    let mut rows = vec!["".to_string(); 5];
     for i in 0..bits.len() {
         if i % 4 == 0 {
             for j in 0..rows.len() - 1 {
                 rows[j].push_str(" ")
             }
             rows[4].push_str("    ");
-            rows[4].push_str(&hex_string[i / 4..i / 4 + 1].to_uppercase());
+            rows[4].push_str(&hex_string[(i / 4)..(i / 4 + 1)].to_uppercase());
         }
 
         let s = format!("{:0>2}", i.to_string());
