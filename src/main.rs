@@ -14,6 +14,20 @@ fn get_bitvector(hex_string: &str) -> Vec<u32> {
     return bits
 }
 
+// fn print_bits(bits: &Vec<u32>) {
+fn print_bits(bits: &[u32]) {
+   let mut rows = vec!["".to_string(), "".to_string(), "".to_string()];
+   // let s: String = "".to_string();
+   for i in 0..bits.len() + 1 {
+        let s = format!("{:0>3}", i.to_string());
+        println!("{:?}", s);
+        for j in 0..s.len() {
+            println!("{:?}", rows[j]);
+            rows[j].push_str(&s[j..j+1])
+        }
+    }
+}
+
 fn main() {
     let matches = App::new("bits")
         .version("1.0")
@@ -27,5 +41,5 @@ fn main() {
         .get_matches();
 
     let hex_string = matches.value_of("hex_string").unwrap();
-    get_bitvector(hex_string);
+    print_bits(&get_bitvector(hex_string));
 }
